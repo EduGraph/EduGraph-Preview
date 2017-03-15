@@ -88,7 +88,7 @@ $result = sparql($query)[0];
             <div class="card card-2">
 
                 <div class="card-block">
-                    <h4 class="card-title" id="card-detail-title"><a href="<?php echo $result->studyProgramURL->value;?>"><?php echo $result->studyProgramName->value;?></a></h4>
+                    <h4 class="card-title" id="card-detail-title"><a href="<?php echo $result->studyProgramURL->value;?>" target="_blank"><?php echo $result->studyProgramName->value;?></a></h4>
 
                     <div class="icon-bar row" style="margin-top:20px; margin-bottom:30px;">
                         <div class="col-4 text-center">
