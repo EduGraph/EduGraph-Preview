@@ -1,0 +1,8 @@
+{
+  "name": "EduGraph/Preview",
+  "description": "description_text",
+  "minimum-stability": "stable",
+  "require": {
+    "guzzlehttp/guzzle": "^6.2"
+  }
+}

@@ -2,9 +2,56 @@ $( document ).ready(function() {
     $.urlParam = function(name){
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
         return results[1] || 0;
-    }
+    };
 
-    $('#url-input').val($.urlParam('url'));
+    var url = $.urlParam('url');
+    $('#url-input').val(decodeURIComponent(url));
+
+    $.ajax( "extract.php?url=" + url )
+        .done(function(data) {
+            if(data == ''){
+                $('.spinner').hide();
+
+
+
+                $.ajax( "view.php?url=" + url )
+                    .done(function(data) {
+                        $('#preview').append(data);
+                        $('#preview').show();
+                        draw();
+
+                    })
+                    .fail(function() {
+                        alert( "error" );
+                    });
+
+
+
+
+
+            }
+            else{
+                alert( "error" );
+            }
+
+        })
+        .fail(function() {
+            alert( "error" );
+        });
+
+
+
+
+
+
+
+
+
+});
+
+function draw(){
+
+    var bisePillars = $("#bisePillars");
 
     var data = {
         labels: [
@@ -15,7 +62,7 @@ $( document ).ready(function() {
         ,
         datasets: [
             {
-                data: [0.2, 0.3, 0.4, 0.1],
+                data: [bisePillars.data('pillarnn'), bisePillars.data('pillarbam'), bisePillars.data('pillarbis'), bisePillars.data('pillarcsc')],
                 backgroundColor: [
                     "#ECEFF1",
                     "#FDB45C",
@@ -23,7 +70,7 @@ $( document ).ready(function() {
                     "#97BBCD"]
             }]
     };
-    var bisePillars = $("#bisePillars");
+
     var bisePillarsDoughnutChart = new Chart(bisePillars, {
         type: 'doughnut',
         data: data,
@@ -31,7 +78,22 @@ $( document ).ready(function() {
             animation : false,
             animateRotate : false,
             animateScale : false,
-            tooltipTemplate: '<%=label%> <%= Math.round(circumference / 6.283 * 100) %> ',
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var allData = data.datasets[tooltipItem.datasetIndex].data;
+                        var tooltipLabel = data.labels[tooltipItem.index];
+                        var tooltipData = allData[tooltipItem.index];
+                        var total = 0;
+                        for (var i in allData) {
+                            total += allData[i];
+                        }
+                        var tooltipPercentage = Math.round((tooltipData / total) * 100);
+                        //return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)';
+                        return tooltipLabel + ': ' + tooltipPercentage + '%';
+                    }
+                }
+            },
             legend: {
                 display: false
             }
@@ -39,12 +101,23 @@ $( document ).ready(function() {
     });
 
     var jobProfiles = $("#jobProfiles");
-
     var data = {
-        labels: ["Administration", "Consulting", "Computer Science", "IT management", "SW Engineering"],
+        labels: ["Administration", "Consulting", "Computer Science", "IT Management", "SW Engineering"],
         datasets: [
             {
-                data: [0, 0, 0, 0, 0]
+                data: [
+                    jobProfiles.data('jobadm'),
+                    jobProfiles.data('jobcon'),
+                    jobProfiles.data('jobinf'),
+                    jobProfiles.data('jobitm'),
+                    jobProfiles.data('jobswe')
+                ],
+                backgroundColor: "rgba(51,105,30,0.2)",
+                borderColor: "rgba(51,105,30,1)",
+                pointBackgroundColor: "rgba(51,105,30,1)",
+                pointBorderColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(51,105,30,1)",
             }
         ]
     };
@@ -55,31 +128,44 @@ $( document ).ready(function() {
         options: {
             scaleOverride: true,
             animation : false,
-            scaleSteps: 4,
-            scaleStepWidth: 0.125,
-            showTooltips: false,
+            scale: {
+                ticks: {
+                    min: 0,
+                    max: 0.3
+                }
+            },
+            tooltips: {
+                enabled: false
+            },
+            pointLabels: {
+                display: false
+            },
             legend: {
                 display: false
             },
             scale: {
                 ticks: {
-                    display: false
-                },
+                    display: false,
+                    min: 0,
+                    max: 0.4,
+                    stepSize: 0.1
+                }
             }
 
         }
     });
+    var longitude = ($( "#map" ).data("longitude"));
+    var latitude = ($( "#map" ).data("latitude"));
 
-
-    var map = L.map('map').setView([51.505, -0.09], 13);
+    var map = L.map('map').setView([longitude, latitude], 13);
 
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    L.marker([51.5, -0.09]).addTo(map)
+    L.marker([longitude, latitude]).addTo(map)
         .bindPopup('University of London')
         .openPopup();
 
 
-});
+}
