@@ -11,24 +11,20 @@ $( document ).ready(function() {
         .done(function(data) {
             if(data == ''){
                 $('.spinner').hide();
-
-
-
                 $.ajax( "view.php?url=" + url )
                     .done(function(data) {
                         $('#preview').append(data);
                         $('#preview').show();
-                        draw();
+                        pillar();
+                        jobProfiles();
+
+
+                        map();
 
                     })
                     .fail(function() {
                         alert( "error" );
                     });
-
-
-
-
-
             }
             else{
                 alert( "error" );
@@ -49,7 +45,7 @@ $( document ).ready(function() {
 
 });
 
-function draw(){
+function pillar(){
 
     var bisePillars = $("#bisePillars");
 
@@ -99,7 +95,9 @@ function draw(){
             }
         }
     });
+}
 
+function jobProfiles(){
     var jobProfiles = $("#jobProfiles");
     var data = {
         labels: ["Administration", "Consulting", "Computer Science", "IT Management", "SW Engineering"],
@@ -154,18 +152,26 @@ function draw(){
 
         }
     });
-    var longitude = ($( "#map" ).data("longitude"));
-    var latitude = ($( "#map" ).data("latitude"));
+}
 
-    var map = L.map('map').setView([longitude, latitude], 13);
+
+function map(){
+    var longitude = (($( "#map" ).data("longitude")));
+    var latitude = (($( "#map" ).data("latitude")));
+
+
+    console.log(latitude)
+    console.log(longitude)
+
+    var map = L.map('map').setView([latitude, longitude], 11);
+
 
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-
-    L.marker([longitude, latitude]).addTo(map)
-        .bindPopup('University of London')
+/*
+    L.marker([latitude, longitude]).addTo(map)
+        .bindPopup('Technische Hochschule Brandenburg')
         .openPopup();
-
-
+*/
 }
