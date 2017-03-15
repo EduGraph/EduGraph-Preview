@@ -4,7 +4,7 @@ require 'vendor/autoload.php';
 require_once 'function.php';
 
 
-$_GET['url'] = 'https://bmake.th-brandenburg.de/tests/EduGraph/thb.jsonld';
+//$_GET['url'] = 'https://bmake.th-brandenburg.de/tests/EduGraph/thb.jsonld';
 $url = $_GET['url'];
 
 $query = '
