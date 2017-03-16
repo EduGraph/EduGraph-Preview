@@ -64,18 +64,18 @@ $( document ).ready(function() {
                     var message = $(errorReporting).find( "message").text();
                     var errorRaw = $(errorReporting).find( "error").text();
                     var rx = /([A-Z]+):[ \t]+'(.+)'/g;
-                    //error = rx.exec(errorRaw);
-                    while (error = rx.exec(errorRaw)) {
+                    var error;
 
+                    while (error = rx.exec(errorRaw)) {
                         var errorCode = error[1];
                         var errorMessage = error[2];
 
-                        if(errorCode == 'WARNING'){
+                        if (errorCode == 'WARNING') {
                             cssClass = 'text-warning';
                             icon = 'warning';
 
                         }
-                        else if(errorCode = 'ERROR'){
+                        else if (errorCode = 'ERROR') {
                             cssClass = 'text-danger';
                             icon = 'error';
                         }
@@ -84,8 +84,12 @@ $( document ).ready(function() {
                             icon = 'error_outline';
                         }
 
-                        $("#errorMessage ul").append('<li class="list-group-item"><i class="material-icons ' + cssClass +'">'+ icon + '</i>  <strong>'+ errorCode +':</strong>&nbsp;'+errorMessage+'</li>');
+                        $("#errorMessage > .list-group").append('<li class="list-group-item"><i class="material-icons ' + cssClass + '">' + icon + '</i>  <strong>' + errorCode + ':</strong>&nbsp;' + errorMessage + '</li>');
 
+                    }
+
+                    if(errorCode){
+                        $("#errorMessage").show();
                     }
                 }
 
