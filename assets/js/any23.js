@@ -8,10 +8,10 @@ $( document ).ready(function() {
         return results[1] || 0;
     };
 
-    var url = $.urlParam('url');
+    var url = decodeURIComponent($.urlParam('url'));
 
     if(url){
-        $('#url-input').val(decodeURIComponent(url));
+        $('#url-input').val(url);
         any23TurtleRequest(url);
     }
 

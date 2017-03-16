@@ -4,8 +4,8 @@ $( document ).ready(function() {
         return results[1] || 0;
     };
 
-    var url = $.urlParam('url');
-    $('#url-input').val(decodeURIComponent(url));
+    var url = decodeURIComponent($.urlParam('url'));
+    $('#url-input').val(url);
 
     $.ajax( "extract.php?url=" + url )
         .done(function(data) {
