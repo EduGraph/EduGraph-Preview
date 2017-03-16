@@ -15,6 +15,8 @@ $( document ).ready(function() {
         any23TurtleRequest(url);
     }
 
+
+
     function any23TurtleRequest(url){
         var service = 'http://fbwsvcdev.th-brandenburg.de:8080/any23/any23/';
         var format = 'turtle';
@@ -28,8 +30,13 @@ $( document ).ready(function() {
 
                 var responseXML = $.parseXML( response);
                 var data = $(responseXML).find( "data").text();
-                console.log(data);
-                $('#turtle').text(data)
+                $('#turtle').text(data);
+
+
+
+                visualizeJsonLD();
+
+
             })
             .fail(function (jqXHR, exception) {
                 // Our error logic here
@@ -83,9 +90,7 @@ $( document ).ready(function() {
                             errorCode = 'Undefined error'
                             icon = 'error_outline';
                         }
-
                         $("#errorMessage > .list-group").append('<li class="list-group-item"><i class="material-icons ' + cssClass + '">' + icon + '</i>  <strong>' + errorCode + ':</strong>&nbsp;' + errorMessage + '</li>');
-
                     }
 
                     if(errorCode){
@@ -111,17 +116,67 @@ $( document ).ready(function() {
                 if(message){
                     $('#errorHeader').text(message)
                 }
-
                 if(error){
                     //console.log(error);
                     //$('#errorMessage').text(error)
                 }
-
         })
         .always(function () {
             //alert("complete");
         });
-
     }
-
 });
+
+
+function visualizeJsonLD(){
+    var data, input, markup;
+    var errors = false;
+
+    $('#graph').show();
+
+    data = $('#turtle').text().trim();
+
+    http://rdf-translator.appspot.com/convert/n3/json-ld/content
+
+        var settings = {
+            "crossDomain": true,
+            "method": "POST",
+            url: 'http://rdf-translator.appspot.com/convert/n3/json-ld/content',
+
+            //"content-type": "application/json; charset=utf-8",
+            //"cache-control" : "no-cache",
+            "processData": true,
+            "data": 'content=' + encodeURIComponent(data)
+        }
+
+    $.ajax(settings)
+        .done(function (response) {
+            markup = response;
+            /*
+            try {
+                input = JSON.parse(markup);
+            }
+            catch(e) {
+                $('#markup-errors')
+                    .text('JSON markup - ' + e)
+                    .show();
+                errors = true;
+            }*/
+
+
+            $('#visualized').empty();
+            d3.jsonldVis(markup, '#visualized');
+
+
+        })
+        .fail(function (response){
+            console.log(response.responseText);
+        });
+
+
+
+    //markup = '{     "@context": {        "ical": "http://www.w3.org/2002/12/cal/ical#",            "xsd": "http://www.w3.org/2001/XMLSchema#",            "ical:dtstart": {            "@type": "xsd:dateTime"        }    },        "ical:summary": "Lady Gaga Concert",        "ical:location": "New Orleans Arena, New Orleans, Louisiana, USA",        "ical:dtstart": "2011-04-09T20:00Z"    }';
+
+
+
+}
