@@ -81,3 +81,8 @@ input#url-input:focus {
     width:40px;
 
 }
+
+.list-group-item i.material-icons {
+    font-size: 31px;
+    padding-right: 15px;
+}

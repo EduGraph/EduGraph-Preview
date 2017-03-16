@@ -62,9 +62,31 @@ $( document ).ready(function() {
                         var errorReporting = $.parseXML( responseText);
                     }
                     var message = $(errorReporting).find( "message").text();
-                    var error = $(errorReporting).find( "error").text();
-                    var rx = /ERROR:.+'(.+)'/g;
-                    error = rx.exec(error)[1];
+                    var errorRaw = $(errorReporting).find( "error").text();
+                    var rx = /([A-Z]+):[ \t]+'(.+)'/g;
+                    //error = rx.exec(errorRaw);
+                    while (error = rx.exec(errorRaw)) {
+
+                        var errorCode = error[1];
+                        var errorMessage = error[2];
+
+                        if(errorCode == 'WARNING'){
+                            cssClass = 'text-warning';
+                            icon = 'warning';
+
+                        }
+                        else if(errorCode = 'ERROR'){
+                            cssClass = 'text-danger';
+                            icon = 'error';
+                        }
+                        else {
+                            errorCode = 'Undefined error'
+                            icon = 'error_outline';
+                        }
+
+                        $("#errorMessage ul").append('<li class="list-group-item"><i class="material-icons ' + cssClass +'">'+ icon + '</i>  <strong>'+ errorCode +':</strong>&nbsp;'+errorMessage+'</li>');
+
+                    }
                 }
 
                 else if (jqXHR.status == 500) {
@@ -82,13 +104,15 @@ $( document ).ready(function() {
                 $('.spinner').hide();
                 $('#error').show();
 
-            if(error){
-                console.log(error);
-                $('#errorMessage').text(error)
-            }
-            if(message){
-                $('#errorHeader').text(message)
-            }
+                if(message){
+                    $('#errorHeader').text(message)
+                }
+
+                if(error){
+                    //console.log(error);
+                    //$('#errorMessage').text(error)
+                }
+
         })
         .always(function () {
             //alert("complete");
