@@ -80,7 +80,7 @@ WHERE {
 					LIMIT 1
 				}
 			}
-			SERVICE <http://de.dbpedia.org/sparql/> {
+			SERVICE <http://dbpedia.org/sparql/> {
 				?placeURI rdfs:comment ?comment_lang;
           			foaf:isPrimaryTopicOf ?wikipediaURL;
 					foaf:depiction ?depiction.
