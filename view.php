@@ -55,8 +55,8 @@ $query = '
 
 
             ?locationURI  a schema:Place ;
-                schema:name  ?locationName;
-                bise:desc ?locationDesc.
+                schema:name  ?locationName.
+
 
                 OPTIONAL {
                     ?locationURI schema:geo   [ a                 schema:GeoCoordinates ;
@@ -66,6 +66,8 @@ $query = '
                 }
                 OPTIONAL { ?locationURI schema:url ?localtionWikiURL. }
                 OPTIONAL { ?locationURI foaf:depiction ?localtionDepiction. }
+                OPTIONAL { ?locationURI bise:desc ?locationDesc. }                
+
 
              BIND( (?pillarCSC) AS ?jobADM)
              BIND( ((?pillarBAM+?pillarBIS)/2 ) AS ?jobCON)
